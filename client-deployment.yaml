@@ -1,0 +1,29 @@
+# scopes or limits the type/kind of object we can create in any given config file
+apiVersion: apps/v1
+# kubectl will make this as a Service object . There are 4 sub-types of Service ClusterIP, NodePort, Load Balancer, Ingress
+# Service object is used to set up networking in k8s  cluster
+# Side Node: Kube-proxy makes sure request is sent to appropriate service
+kind: Deployment
+#  name the object that is created. mostly used for logging purposes.
+metadata:
+  name: client-deployment
+spec:
+# no of different pods this deployment is supposed to make
+  replicas: 1
+  selector:
+# selector using which master node can have a handel to the pod that is created
+    matchLabels:
+      component: web
+# defines the section of every pod that is created and maintained by this deployment
+  template:
+    metadata:
+      labels:
+        component: web
+    spec:
+      containers:
+# container name
+        - name: client
+          image: stephengrider/multi-client
+# port mapping to the container
+          ports:
+            - containerPort: 3000

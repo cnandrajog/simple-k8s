@@ -1,0 +1,24 @@
+# `apiVersion` scopes or limits the type/kind of object we can create in any given config file
+apiVersion: v1
+# kubectl will make this a POD object
+# POD is use to run a container/ group of container
+kind: Pod
+metadata:
+  #  name the pod/object that is created. mostly used for logging purposes.
+  name: client-pod
+  # with the help of the label SERVICE object will be able to find the pod
+  labels:
+    component: web
+
+# list containers comes under spec
+spec:
+  # container details that will run inside this pod
+  containers:
+    # container name. Logging will print this name
+    - name: client
+# name of the image this container will be made out of
+      image: stephengrider/multi-worker
+# on this container want to expose port 3000 to outside world.
+#This config alone will not give us access to port 3000. To get full access Service yaml will also have to list some configuration
+      ports:
+        - containerPort: 3000

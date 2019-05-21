@@ -1,0 +1,29 @@
+# scopes or limits the type/kind of object we can create in any given config file
+apiVersion: v1
+# kubectl will make this as a Service object . There are 4 sub-types of Service ClusterIP, NodePort, Load Balancer, Ingress
+# Service object is used to set up networking in k8s  cluster
+# Side Node: Kube-proxy makes sure request is sent to appropiate service
+kind: Service
+#  name the Service/object that is created. mostly used for logging purposes.
+metadata:
+  name: client-node-port
+spec:
+  # `NodePort` : Exposes the container to outside word (only good for dev purpose).
+  # As a developer you can open you web browser and access the running container.
+  # forwars the request to the target port  (in this case 3000)
+  type: NodePort
+  ports:
+    # the port that another pod or container inside of our application could access in order to get access to this current pod
+    # port that is exposed to the outside world
+    - port: 3050
+      # port inside the current pod you want to open traffic to. Send any in-coming traffic to port 3000 inside the cureent pod
+      # port that is opened up for the targeted pod
+      targetPort: 3000
+      # this is mostly used for development only. port that you will type into the browser when you want to test out the container running inside that pod
+      # number between 30000-32767
+      nodePort: 31515
+# Going to look for any other pod/object that is running that has key value pair of component: web
+# and direct all traffic  to that pod/object
+# and expose the target port (3000) to the outside world
+  selector:
+    component: web
